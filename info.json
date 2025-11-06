@@ -1,0 +1,9 @@
+{
+  "name": "hack-n-torio",
+  "version": "0.1.0",
+  "title": "Hack n'torio",
+  "author": "Quentin Demuynck",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0"],
+  "description": "This is a simple mode where you can have a shared todo-list."
+}
