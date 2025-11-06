@@ -2,6 +2,7 @@
 local Panel = 
 {
     name = "no_name",
+    title = "Title",
     root_element = nil,
     ---@type LuaPlayer
     builder_callback = nil,
@@ -15,12 +16,13 @@ Panel.__index = Panel
 ---@param builder_callback any
 ---@param type GuiElementType
 ---@return Panel
-function Panel.new(name, builder_callback, type)
+function Panel.new(name, title , builder_callback, type)
     local self = setmetatable({}, Panel)
 
     self.name = name
     self.builder_callback = builder_callback
     self.root_type = type
+    self.title = title
 
     return self
 end
@@ -55,6 +57,37 @@ function Panel:build(player)
     name = self.name,
     direction = "vertical"
     }
+
+     root.auto_center = true
+
+-- create title bar
+    local titlebar = root.add{
+        type = "flow",
+        direction = "horizontal"
+    }
+    titlebar.drag_target = root -- makes the window draggable by the titlebar
+
+    titlebar.add{
+        type = "label",
+        caption = self.title,
+        style = "frame_title"
+    }
+
+
+    local dragger = titlebar.add{
+      type = "empty-widget",
+      ignored_by_interaction = true,
+      style = "hack_drag_handle"
+    }
+
+    -- close button
+    titlebar.add{
+        type = "sprite-button",
+        name = "hack_close",
+        sprite = "utility/close",
+        style = "close_button"
+    }
+
     self.builder_callback(root)
 
     return root

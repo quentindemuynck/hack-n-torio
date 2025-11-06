@@ -1,62 +1,78 @@
 local Panel = require("guilib/Panel")
 
+---@type LuaCustomTable<string|integer, LuaPlayer>
+local players = nil
+
 ---comment
 ---@param root LuaGuiElement
-function create_button_root(root)
-    root.caption = "Open Todo"
-end
-
 function create_todo_root(root)
-    root.auto_center = true
-
--- create title bar
-    local titlebar = root.add{
-        type = "flow",
-        direction = "horizontal"
-    }
-    titlebar.drag_target = root -- makes the window draggable by the titlebar
-
-    titlebar.add{
-        type = "label",
-        caption = "Todo List",
-        style = "frame_title"
-    }
-
-
-    local dragger = titlebar.add{
-      type = "empty-widget",
-      ignored_by_interaction = true,
-      style = "informatron_drag_handle"
-    }
-
-    -- close button
-    titlebar.add{
-        type = "sprite-button",
-        name = "hack_close",
-        sprite = "utility/close",
-        style = "close_button"
-    }
-
     -- create window
-    root.add{
-        type = "button",
-        caption = "Random ass button"
+    local tabs = root.add{
+        type = "tabbed-pane",
     }
 
+    -- players tab
+    local players_tab = tabs.add{
+        type = "tab",
+        caption = "Players"
+    }
+    local players_content = tabs.add{
+        type = "flow",
+        direction = "vertical"
+    }
+    for _, player in pairs(game.players) do
+        local player_display = players_content.add{
+            type = "flow",
+            direction = "horizontal"
+        }
+
+        player_display.add{
+            type = "label",
+            caption = player.name
+        }
+
+        player_display.add{
+            type = "progressbar"
+
+        }
+    end
+
+    tabs.add_tab(players_tab, players_content)
+
+    -- tasks tab
+    local tasks_tab = tabs.add{
+        type = "tab",
+        caption = "Tasks"
+    }
+    local tasks_content = tabs.add{
+        type = "flow",
+        direction = "vertical"
+    }
+    tasks_content.add{ type = "label", caption = "Tasks go here" }
+
+    tabs.add_tab(tasks_tab, tasks_content)
 end
 
+
 ---@type Panel
-local button = Panel.new("show_todo", create_button_root, "button")
----@type Panel
-local todo_window = Panel.new("todo_window", create_todo_root, "frame")
+local todo_window = Panel.new("todo_window","Todo" , create_todo_root, "frame")
 local joined = false
+
 
 script.on_event( defines.events.on_player_joined_game ,function (event)
     if joined then return end
 
     joined = true
-    button:Show(game.get_player(event.player_index))
+
     todo_window:Hide(game.get_player(event.player_index))
+end)
+
+script.on_init(function ()
+    players = game.players
+end)
+
+script.on_event(defines.events.on_player_created, function(event)
+    players = game.players
 end)
 
 script.on_event("hack-reload-ui", function(event)
@@ -85,9 +101,12 @@ script.on_event(defines.events.on_gui_click, function (event)
     end
 end)
 
+script.on_event(defines.events.on_lua_shortcut, function (event)
+    if event.name then todo_window:ToggleVisibility(game.get_player(event.player_index))  end
+end)
+
 
 function recreate_menus(player)
-    button:build(player)
     todo_window:build(player)
     todo_window:Hide(player)
 end
