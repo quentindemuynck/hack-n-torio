@@ -53,6 +53,7 @@ function Panel:build(player)
     local root = player.gui.screen.add{
     type = self.root_type,
     name = self.name,
+    direction = "vertical"
     }
     self.builder_callback(root)
 

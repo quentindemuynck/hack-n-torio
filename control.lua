@@ -8,11 +8,41 @@ end
 
 function create_todo_root(root)
     root.auto_center = true
-    root.caption = "Todo list"
 
-root.add({type = "button",
-    name = "hack_close",
-    caption = "Close"})
+-- create title bar
+    local titlebar = root.add{
+        type = "flow",
+        direction = "horizontal"
+    }
+    titlebar.drag_target = root -- makes the window draggable by the titlebar
+
+    titlebar.add{
+        type = "label",
+        caption = "Todo List",
+        style = "frame_title"
+    }
+
+
+    local dragger = titlebar.add{
+      type = "empty-widget",
+      ignored_by_interaction = true,
+      style = "informatron_drag_handle"
+    }
+
+    -- close button
+    titlebar.add{
+        type = "sprite-button",
+        name = "hack_close",
+        sprite = "utility/close",
+        style = "close_button"
+    }
+
+    -- create window
+    root.add{
+        type = "button",
+        caption = "Random ass button"
+    }
+
 end
 
 ---@type Panel
