@@ -43,3 +43,22 @@ style.hack_drag_handle = {
   right_margin = 4
 }
 
+style.hack_name =
+{
+  type = "label_style",
+  horizontal_align = "left",
+  vertical_align = "center"
+}
+
+style.hack_progress =
+{
+  type = "progressbar_style",
+  horizontal_align = "right",
+  vertical_align = "center"
+}
+
+style.hack_player_list =
+{
+  type = "horizontal_flow_style",
+  horizontally_stretchable = "on",
+}

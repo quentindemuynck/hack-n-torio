@@ -23,17 +23,19 @@ function create_todo_root(root)
     for _, player in pairs(game.players) do
         local player_display = players_content.add{
             type = "flow",
-            direction = "horizontal"
+            direction = "horizontal",
+            style = "hack_player_list"
         }
 
         player_display.add{
             type = "label",
-            caption = player.name
+            caption = player.name,
+            style = "hack_name"
         }
 
         player_display.add{
-            type = "progressbar"
-
+            type = "progressbar",
+            style = "hack_progress"
         }
     end
 
